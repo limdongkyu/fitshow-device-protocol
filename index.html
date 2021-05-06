@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body,html{
+                width: 100%;
+                height: 100%;
+                margin: 0px;
+                font-size: 16px;
+            }
+            .container{
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: row;
+            }
+            .left{
+                width: 15%;
+                height: 100%;
+                background-color: azure;
+                position: fixed;
+                left: 0px;
+                padding-top: 3em;
+            }
+            .device-list{
+                margin-top: 4em;
+                padding-left: 1em;
+            }
+            .right{
+                width: 85%;
+                height: 100%;
+                margin-left: 15%;
+            }
+            .left-info{
+                text-align: center;
+                font-size: 2em;
+                font-weight: bold;
+            }
+            .protocol-content{
+                width: 75%;
+                margin: 0 auto;
+            }
+            .item5{
+                width: 20%;
+                text-align: center;
+            }
+            p{
+                text-indent: 2rem;
+                font-size: 16px;
+            }
+            .title{
+                font-size: 2rem;
+                font-weight: bold;
+                text-align: center;
+            }
+            .protocol-content{
+                padding-top: 10rem;
+            }
+            .version{
+                font-size: 1.5rem;
+                text-align: center;
+                margin-top: 0.5rem;
+            }
+            .item-title{
+                font-size: 1.5rem;
+                font-weight: bold;
+                text-align: center;
+                margin-top: 4rem;
+            }
+            table{
+                width: 100%;
+                border-top: 1px solid #dbdbdb;
+                border-left: 1px solid #dbdbdb;
+                border-spacing: 0px;
+            }
+            td,th{
+                border-bottom: 1px solid #dbdbdb;
+                border-right: 1px solid #dbdbdb;
+                height: 3rem;
+                border-spacing: 0px;
+                text-align: center;
+            }
+            .annotation{
+                font-size: 0.8rem;
+                color: rgb(216, 109, 71);
+                margin: 1rem;
+            }
+            .state{
+                font-size: 1rem;
+                margin: 1rem;
+
+            }
+            .statement{
+                font-size: 1.2rem;
+                color: rgb(143, 49, 14);
+                margin: 1rem;
+            }
+            .td1{
+                background-color:rgb(234 241 221)
+            }
+            .td2{
+                background-color:rgb(242 219 219)
+            }
+            .td3{
+                background-color:rgb(219 229 241)
+            }
+            .td4{
+                background-color:rgb(218 238 243)
+            }
+            .td5{
+                background-color:rgb(234 241 221)
+            }
+            .td6{
+                background-color: rgb(238, 174, 151);
+            }
+            .td7{
+                background-color: #3e86ad;
+            }
+            .td8{
+                background-color: #80be44;
+            }
+            .td9{
+                background-color: #e79326;
+            }
+            .td10{
+                background-color: rgb(72, 177, 219);
+            }
+            .td11{
+                background-color: rgb(95, 241, 222);
+            }
+            .cmdstart{
+              color: red;
+            }
+            b{
+                color:rgb(0 175 240)
+            }
+            .sub-cmd-item{
+                height: 3rem;
+                text-indent: 2rem;
+            }
+            .device-list-item{
+                text-align: left;
+                cursor: pointer;
+                font-size: 1em;
+                font-weight: bold;
+            }
+            .tdno{
+                font-size: 14px;
+                color: #cccccc;
+            }
+            li{
+                margin-top: 2em;
+            }
+            .green1{
+                color: #6a9b6d;
+            }
+            .blue1{
+                color: #5677fb;
+                
+            }
+            .return-table{
+                margin: 4em 0 0 4em;
+            }
+            .item-subtitle{
+                font-size: 24px;
+                color: rgb(241, 103, 223);
+                margin: 4em 0 1em;
+            }
+            .item-subtitle2{
+                font-size: 24px;
+                color: rgb(231, 93, 50);
+                margin: 4em 0 1em; 
+            }
+        </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="left">
+            <div class="left-info">运动秀蓝牙协议</div>
+            <div class="device-list">
+                <p class="device-list-item" onclick="goto('treadmill')">跑步机</p>
+                <p class="device-list-item" onclick="goto('cartable')">车表</p>
+                <p class="device-list-item" onclick="goto('count')">小件设备</p>
+            </div>
+        </div>
+        <div class="right" id="right">
+            <div class="protocol-content " id="treadmill">
+                <div class="title">跑步机蓝牙协议</div>
+                <div class="version">v1.1</div>
+                <div class="item-title">协议格式标准</div>
+                <p>蓝牙通讯协议采用帧进行通讯，每一帧采用了起始头、校验码、终止尾的方式进行数据校验，基本数据格式如下：</p>
+                <div class="table-content">
+                    <table class="table">
+                        <thead>
+                            <th class="item5 td1">0x02</th>
+                            <th class="item5 td2">CMD</th>
+                            <th class="item5 td3">DATA</th>
+                            <th class="item5 td4">FCS</th>
+                            <th class="item5 td5">0x03</th>
+                        </thead>
+                        <tbody>
+                            <td class="item5">起始码</td>
+                            <td class="item5">指令</td>
+                            <td class="item5">数据</td>
+                            <td class="item5">校验码</td>
+                            <td class="item5">终止码</td>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="annotation">*注：校验码是除去指令头尾，各个字节进行异或后的值</div>
+                <div class="state">设备返回的数据格式：</div>
+                <div class="table-content">
+                    <table class="table">
+                        <thead>
+                            <th class="item5 td1" >0x02</th>
+                            <th class="item5 td2">CMD</th>
+                            <th class="item5 td3">DATA</th>
+                            <th class="item5 td4">FCS</th>
+                            <th class="item5 td5">0x03</th>
+                        </thead>
+                        <tbody>
+                            <td class="item5">起始码</td>
+                            <td class="item5">指令</td>
+                            <td class="item5">数据</td>
+                            <td class="item5">校验码</td>
+                            <td class="item5">终止码</td>
+                        </tbody>
+                    </table>
+                </div>
+                <p>发送数据后设备将按上述格式返回，意味着返回数据包含发送时的指令，在程序中可以直接依次指令做出不同的处理</p>
+                <div class="annotation">发送与接收数据采用小段对齐方式。即数据低字节在前、高字节在后。</div>
+                <p>数据类型：B：字节;  W：整形;  L：长整型;  N：变长</p>
+                <p class="statement">说明：为将来扩展考虑规定：当电子表收到未在本协议中出现的指令时（指令正确）应按格式只返回指令（不包含数据部分）</p>
+                <p class="item-title">设备信息</p>
+                <p>指令: <b class="cmdstart"> SYS_INFO</b> = 0X50</p>
+                <P >本协议指定了允许上位机读取设备所支持的信息数据，包括设备的一些参数，如最高速度。若设备不支持指定参数，设备只需返回指令即可。</P>
+                <div >
+                    <div class="sub-cmd-item"><b>INFO_MODEL</b> = 0&emsp;获取设备机型（必须实现）</div>
+                    <div class="sub-cmd-item"><b>INFO_SPEED</b> = 2&emsp;获取设备速度参数（必须实现）</div>
+                    <div class="sub-cmd-item"><b>INFO_INCLNE</b>= 3&emsp;获取设备坡度参数</div>
+                    <div class="sub-cmd-item"><b>INFO_TOTAL</b> = 4&emsp;获取设备累计里程</div>
+                </div>
+                <div  class="state">获取设备信息时发送数据</div>
+                <div class="table-content">
+                    <table class="table">
+                        <tr>
+                            <th rowspan="4" class="td2">SYS_INFO</th>
+                            <th class="td3">INFO_MODEL</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">INFO_SPEED</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">INFO_INCLNE</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">INFO_TOTAL</th>
+                        </tr>
+                          
+                    </table>
+                </div>
+                <div class="state">设备返回信息：</div>
+                <div class="table-content">
+                    <table class="table">
+                        <tr>
+                            <th rowspan="4" class="td2">SYS_INFO</th>
+                            <th class="td3">INFO_MODEL</th>
+                            <th class="td5">厂家（W）</th>
+                            <th class="td5">机型（W）</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th class="td3">INFO_SPEED</th>
+                            <th class="td5">最高速（B）</th>
+                            <th class="td5">最低速（B）</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th class="td3">INFO_INCLNE</th>
+                            <th class="td5">最高坡度（B）</th>
+                            <th class="td5">最低坡度（B）</th>
+                            <th class="td5">配置（B）</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">INFO_TOTAL</th>
+                            <th colspan="3" class="td5">累计里程（L）单位0.1KM</th>
+                        </tr>
+                          
+                    </table>
+                </div>
+                <p class="statement">速度返回0.1单位，100代表10.0km/h</p>
+                <p class="statement">坡度为带符号的数，如最低坡度-3</p>
+                <p class="statement">坡度配置中，bit0(0：公里 1：英里),bit1(1：支持暂停)</p>
+
+
+
+                <p class="item-title">设备状态</p>
+                <p>指令:<b class="cmdstart">SYS_STATUS</b> = 0X51</p>
+                <P class="state">设备根据当前运行状态返回状态：</P>
+                <div >
+                    <div class="sub-cmd-item"><b>STATUS_NORMAL</b> = 0      &emsp;待机状态</div>
+                    <div class="sub-cmd-item"><b>STATIS_END</b> = 1      &emsp;已停机状态（还没返回到待机状态）</div>
+                    <div class="sub-cmd-item"><b>STATUS_START</b>= 2      &emsp;倒计时启动状态</div>
+                    <div class="sub-cmd-item"><b>STATUS_RUNNING</b> = 3      &emsp;运行中状态</div>
+                    <div class="sub-cmd-item"><b>STATUS_STOPPING</b> = 4      &emsp;减速停止中（完全停止后变为 PAUSE 或 END 或 NORMAL ）</div>
+                    <div class="sub-cmd-item"><b>STATUS_ERROR</b> = 5     &emsp;设备故障状态</div>
+                    <div class="sub-cmd-item"><b>STATUS_DISABLE</b> = 6      &emsp;禁用（安全开关或睡眠等）</div>
+                    <div class="sub-cmd-item"><b>STATUS_READY</b> = 9      &emsp;设备就绪（CONTROL_READY指令后应为此状态）</div>
+                    <div class="sub-cmd-item"><b>STATUS_PAUSED</b> = A      &emsp;设备已暂停</div>
+                </div>
+                <P class="state">获取设备状态发送</P>
+                <div class="table-content">
+                    <table class="table">
+                        <tbody>
+                            <td class="item5 td2">SYS_STATUS</td>
+                            <td class="item5 td3">心率（B）</td>
+                            <td class="item5 td5">备用（N）</td>
+                        </tbody>
+                    </table>
+                </div>
+                <P class="state">设备返回状态：</P>
+                <div class="table-content">
+                    <table class="table">
+                        <tr>
+                            <th rowspan="9 " class="td2">SYS_STATUS</th>
+                            <th class="td3">STATUS_NORMAL</th>
+                            <th colspan="8" ></th>
+                        </tr>
+                        <tr>
+                            <th class="td3">STATUS_READY</th>
+                            <th colspan="8" ></th>
+                        </tr>
+                        <tr>
+                            <th class="td3">STATUS_START</th>
+                            <th colspan="8" class="td6">当前倒计启动秒值（B）</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">STATIS_END</th>
+                            <th rowspan="4" class="td1">当前速度（B）</th>
+                            <th rowspan="4" class="td1">当前坡度（B）</th>
+                            <th rowspan="4" class="td1">正计时间（W）</th>
+                            <th rowspan="4" class="td1">正计距离（W）</th>
+                            <th rowspan="4" class="td1">正计热量（W）</th>
+                            <th rowspan="4" class="td1">正计步数（W）</th>
+                            <th rowspan="4" class="td1">当前心率（B）</th>
+                            <th rowspan="4" class="td1">当前程式段数（B）</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">STATUS_RUNNING</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">STATUS_STOPPING</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">STATUS_PAUSED</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">STATUS_ERROR</th>
+                            <th colspan="8" class="td6">错误码（B）</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">STATUS_DISABLE</th>
+                            <th colspan="8" class="td6">禁用码（1：安全锁 2 睡眠）</th>
+                        </tr>
+                    </table>
+                </div>
+                <p class="item-title">设备控制</p>
+                <p>指令:<b class="cmdstart">SYS_CONTROL</b> = 0X53(下面按流程顺序排列)</p>
+                <div >
+                    <div class="sub-cmd-item"><b>CONTROL_READY</b> = 1&emsp;准备开始（START之前写入运动数据）</div>
+                    <div class="sub-cmd-item"><b>CONTROL_USER</b> = 0&emsp;写入用户信息</div>
+                    <div class="sub-cmd-item"><b>CONTROL_SPEED</b>= 4&emsp;速度数据（程序模式）</div>
+                    <div class="sub-cmd-item"><b>CONTROL_INCLINE</b> = 5&emsp;坡度数据（程序模式）</div>
+                    <div class="sub-cmd-item"><b>CONTROL_START</b> = 9&emsp;开始或恢复设备运行</div>
+                    <div class="sub-cmd-item"><b>CONTROL_PAUSE</b> = 0a&emsp;获取设备累计里程</div>
+                    <div class="sub-cmd-item"><b>CONTROL_STOP</b> = 3&emsp;停止设备（此指令直接停止设备）</div>
+                    <div class="sub-cmd-item"><b>CONTROL_TARGET</b> = 2&emsp;控制速度、坡度（用户手动操作）</div>
+                </div>
+                <P class="state">发送到设备的数据（起始、校验、终止已省略）</P>
+                <div class="table-content">
+                    <table class="table">
+                        <tr>
+                            <th rowspan="8 " class="td2">SYS_CONTROL</th>
+                            <th class="td3">CONTROL_READY</th>
+                            <th class="td5" >运动ID(L)</th>
+                            <th class="td5" >模式</th>
+                            <th class="td5" >程序段数</th>
+                            <th class="td5" colspan="2" >模式倒计数(W)</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_USER</th>
+                            <th class="td5">用户ID(L)</th>
+                            <th class="td5" >体重 kg</th>
+                            <th class="td5" >身高 cm</th>
+                            <th class="td5" >年龄</th>
+                            <th class="td5" >性别 (1 是女生)</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_SPEED</th>
+                            <th class="td5" >起始 （B）</th>
+                            <th class="td5" colspan="4">程序速度数据 1字节 1段</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_INCLINE</th>
+                            <th class="td5" >起始 （B）</th>
+                            <th class="td5" colspan="4">程序坡度数据 1字节 1段</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_START</th>
+                            <th colspan="5" class="tdno">注：此指令后电子表应进入倒计时启动状态，或暂停时恢复运行</th>
+
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_PAUSE</th>
+                            <th colspan="5"></th>
+
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_STOP</th>
+                            <th colspan="5" class="tdno">注：此指令后电子表应进入减速停机并进入停止状态</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_TARGET</th>
+                            <th colspan="2" class="td5">目标速度（B）</th>
+                            <th colspan="3" class="td6">目标坡度（B）</th>
+
+                        </tr>
+                    </table>
+                </div>
+                <p class="statement">* 模式（模式值取低6位有效，最高位为兼容性标志，最高位不为1时 CONTROL_READY 指令 按兼容模式需启动设备，即电子表收到此指令后进入启动中状态）：</p>
+                <div class="sub-cmd-item"><b>SYS_MODE_NORMAL</b> = 0&emsp;正常模式，用于快速启动</div>
+                <div class="sub-cmd-item"><b>SYS_MODE_TIMER</b> = 1&emsp;倒计时间模式</div>
+                <div class="sub-cmd-item"><b>SYS_MODE_DISTANCE</b>= 2&emsp;倒计距离模式</div>
+                <div class="sub-cmd-item"><b>SYS_MODE_CALORIES</b> = 3&emsp;倒计卡路里模式</div>
+                <div class="sub-cmd-item"><b>SYS_MODE_PROGRAM</b> = 5&emsp;程序模式（会发送速度及坡度数据）</div>
+                <p>注：</p>
+                <ul>
+                    <li>程式模式下，APP 将发送速度及坡度(若设备支持坡度)数据到设备中，受 BLE 所限
+                        通讯数据每帧总字节不得超 20 字节，因此规定当程式数据超过 12 段时，APP 将数
+                        据分段写入设备中。发送 CONTROL_READY 指令时参数中的程式段数即为总段数。
+                        <b style="color: red;">若总段数减起始位置大于 12 时，发送的数据则固定为 12 字节数据，否则为剩余数
+                            据。</b>因此写入数据时起始位置为 0，12，24… 递增。</li>
+                    <li><b style="color: red;">运动 ID 与用户 ID</b>：ID 用于识别当前运动者， APP 通过对比 ID 判断运动者身份，
+                        非法身份时将会禁止二次连接，因此电子表程序需将 APP 下发的这两个 ID 值存储
+                        在变量中，在 SYS_DATA 之 DATA_INFO 指令中按需回传即可。并在运动停止后（非
+                        暂停）清零或收到 CONTROL_READY 指令后重置。</li>
+                    <li>CONTROL_TARGET：目标速度与坡度，在某些情况（如设备不支持坡度）下 APP 发
+                        送此指令时不带有坡度数据，电子表处理此指令时应注意此点，<b style="color: red;">电子表通过判断此
+                            指令长度来决定是否需要控制设备坡度。</b></li>
+                </ul>
+                <p class="statement">发送控制指令到设备后，设备返回的数据：</p>
+                <div class="table-content">
+                    <table class="table">
+                        <tr>
+                            <th rowspan="8 " class="td2">SYS_CONTROL</th>
+                            <th class="td3">CONTROL_READY</th>
+                            <th class="td5" colspan="4">启动秒数</th>
+                            <th>&emsp;&emsp;&emsp;</th>
+
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_USER</th>
+                            <th colspan="5"></th>
+
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_SPEED</th>
+                            <th colspan="5"></th>
+
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_INCLINE</th>
+                            <th colspan="5"></th>
+
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_START</th>
+                            <th colspan="5"></th>
+
+
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_PAUSE</th>
+                            <th colspan="5"></th>
+
+
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_STOP</th>
+                            <th colspan="5"></th>
+
+                        </tr>
+                        <tr>
+                            <th class="td3">CONTROL_TARGET</th>
+                            <th colspan="2" class="td5">实际目标速度</th>
+                            <th colspan="2" class="td5">实际目标坡度</th>
+                            <th>&emsp;&emsp;&emsp;</th>
+                        </tr>
+                    </table>
+                </div>
+                <p class="item-title">设备数据</p>
+                <p>指令:<b class="cmdstart">SYS_DATA</b> = 0X52</p>
+                <div >
+                    <div class="sub-cmd-item"><b>DATA_SPORT</b> = 0&emsp;读取当前运动量</div>
+                    <div class="sub-cmd-item"><b>DATA_INFO</b> = 1&emsp;当前运动信息</div>
+                    <div class="sub-cmd-item"><b>DATA_SPEED</b>= 2&emsp;速度数据（程序模式）</div>
+                    <div class="sub-cmd-item"><b>DATA_INCLINE</b> = 3&emsp;坡度数据（程序模式）</div>
+                </div>
+                <P class="state">发送到设备的数据（起始、校验、终止已省略）</P>
+                <div class="table-content">
+                    <table class="table">
+                        <tr>
+                            <th rowspan="8 " class="td2">SYS_DATA</th>
+                            <th class="td3">DATA_SPORT</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th class="td3">DATA_INFO</th>
+                            <th class="td5">用户ID(L)</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">DATA_SPEED</th>
+                            <th  class="td5">起始位置（B）</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">DATA_INCLINE</th>
+                            <th  class="td5">起始位置（B）</th>
+                        </tr>
+                    </table>
+                </div>
+                <P class="state">读取设备数据时返回</P>
+                <div class="table-content">
+                    <table class="table">
+                        <tr>
+                            <th rowspan="8 " class="td2">SYS_DATA</th>
+                            <th class="td3">DATA_SPORT</th>
+                            <th class="td5">正计时间(W)</th>
+                            <th class="td5">正计距离(W)</th>
+                            <th class="td5">正计热量(W)</th>
+                            <th class="td5">正计步数(W)</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th class="td3">DATA_INFO</th>
+                            <th class="td5">用户ID(L)</th>
+                            <th class="td5">运动ID(L)</th>
+                            <th class="td5">模式</th>
+                            <th class="td5">程序段数</th>
+                            <th class="td5">倒计值（W）</th>
+
+                        </tr>
+                        <tr>
+                            <th class="td3">DATA_SPEED</th>
+                            <th  class="td5">起始位置（B）</th>
+                            <th class="td5" colspan="4">程序速度数据1字节1段 *</th>
+                        </tr>
+                        <tr>
+                            <th class="td3">DATA_INCLINE</th>
+                            <th  class="td5">起始位置（B）</th>
+                            <th class="td5" colspan="4">程序坡度数据1字节1段 *</th>
+                        </tr>
+                       
+                    </table>
+                </div>
+                <p>注：</p>
+                <ul>
+                    <li> ID 必需按运动前APP下发的ID真实回传；</li>
+                    <li>程式速度与坡度数据与控制指令中一样，因此读取时按 0，12，24 …的起始始位置
+                        进行数据读取。</li>
+                </ul>
+            </div>
+            <div class="protocol-content " id="cartable">
+                <div class="title">车表设备蓝牙协议</div>
+                <div class="version">v1.0</div>
+                <div class="version">（健⾝车、椭圆机、划船机、登⼭机、踏步机）</div>
+                <div class="item-title">协议格式标准</div>
+                <p>蓝⽛通讯使⽤帧⽅式通讯，每⼀帧采⽤了起始头、校验码、终⽌尾的⽅式进
+                    ⾏数据校验，帧间隔最⼤ 250ms，在正确接收到帧返回数据后，⽴即进⾏下⼀帧
+                    通讯。数据格式如下：</p>
+                <div class="table-content">
+                    <table class="table">
+                        <thead>
+                            <th class="item5 td7">0x02</th>
+                            <th class="item5 td8">CMD</th>
+                            <th class="item5 td8">DATA</th>
+                            <th class="item5 td9">FCS</th>
+                            <th class="item5 td7">0x03</th>
+                        </thead>
+                        <tbody>
+                            <td class="item5">起始码</td>
+                            <td class="item5">指令</td>
+                            <td class="item5">数据</td>
+                            <td class="item5">校验码</td>
+                            <td class="item5">终止码</td>
+                        </tbody>
+                    </table>
+                </div>
+                <p>协议：baud, N, 8, 1　 (⽆校验，8位数据，1位停⽌)</p>
+                <p>波特率：4800、9600、19200、38400、115200 ⾃适应</p>
+                <p>起始码：固定的1字节数据，为⼗六进制：0x02；</p>
+                <p>指令：1字节的指令，或2字节包含⼦指令；</p>
+                <p>数据：写⼊或读取的数据，长度依指令不同⽽不同；</p>
+                <p>校验码：指令/数据 每字节进⾏异或后的值（1字节）；</p>
+                <p>终⽌码：固定的1字节数据，为⼗六进制：0x03。</p>
+                <P class="green1">*数据采⽤⼩端对齐⽅式，即低字节在前、⾼字节在后。数据类型： 
+                    B:字节　W:整型　L:长整型　N:多字节　(未指定类型数据均为字节型)
+                </P> 
+                <p class="blue1">
+                    *设备收到未在本协议中出现的指令（格式符合标准并验证成功）时应返回包含当前指令的帧，如下所⽰：
+                </p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7">CMD</th>
+                            <th class="td7" colspan="2">DATA</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x7F</td>
+                            <td>0x01</td>
+                            <td>0x02</td>
+                            <td>0x7C</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                   
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8">CMD</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x7F</td>
+                            <td>0x7F</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <p class="item-title">蓝牙模块通用指令</p>
+                <p>蓝⽛模块在上电启动后会发送配置指令到设备，设备需按格式返回数据。</p>
+                <div class="item-subtitle">1. 配置设备型号（必要）0x50</div>
+                <p>设备型号是APP识别的依据，因此设备必须按格式实现机型代码数据
+                    返回。否则运动秀将⽆法识别当前蓝⽛模块。
+                </p>
+                <p class="blue1">蓝⽛发送的数据：（蓝⾊表头代表蓝⽛发送到设备，下同）</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7"  colspan="2">CMD</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x50</td>
+                            <td>0x00</td>
+                            <td>0x50</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                   
+                </div>
+                <div class=" table-content return-table">
+                    <p class="green1">设备返回的数据：（绿⾊表头代表设备发送到蓝⽛，下同）</p>
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8" colspan="2">DATA</th>
+                            <th class="td8" >FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x50</td>
+                            <td>0x00</td>
+                            <td>品牌（W）</td>
+                            <td>机型（W）</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <p>*品牌、机型代码分别是16位的⽆符号数，品牌代码由运动秀分配后固
+                    定，新机型代码需由制造商通过运动秀官⽹平台申请
+                </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <p class="item-title">设备参数 0x41</p>
+                <P>APP需要⼀些设备的参数来适配相关操作，因此APP会在连接蓝⽛模块后发
+                    送请求指令以获取设备参数。
+                </P>
+
+
+
+                <div class="item-subtitle">1. 设备参数</div>
+                <p>APP通过此指令获取设备相关参数</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x41</td>
+                            <td>0x02</td>
+                            <td>0x40</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8" colspan="4">DATA</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x41</td>
+                            <td>0x02</td>
+                            <td>阻力（B）</td>
+                            <td>坡度（B）</td>
+                            <td>配置（B）</td>
+                            <td>段数（B）</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <ul>
+                    <li>阻⼒：设备⽀持最⼤阻⼒级别，APP将从0开始到此值进⾏调节；</li>
+                    <li>坡度：若设备⽀持坡度则返回⽀持的总坡度值，否则返回0；</li>
+                    <li>段数：⽀持程式模式的段数，APP会转换或过滤相同段数的程式，
+                        以⽅便设备显⽰程式数据，若不限制返回1（APP发送 8 - 48段间的
+                        程式）；返回0则说明设备不⽀持APP启动程式模式。</li>
+                    <li>配置：bit0 (1代表英制单位) bit1 (1代表支持暂停功能；）支持坡度的时候，高4位用于表明设备负坡度范围，不支持负坡度则为0) </li>
+                </ul>
+
+
+                <div class="item-subtitle">2. 累计值</div>
+                <p>设备感应器累计感应次数，若设备不⽀持此指令则返回的数据不包含DATA部分。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x41</td>
+                            <td>0x03</td>
+                            <td>0x42</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">DATA</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x41</td>
+                            <td>0x03</td>
+                            <td>累计值（L）</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div class="item-subtitle">3. 同步设备时间</div>
+                <p>APP连接蓝⽛并获取参数成功后，会发送⼀条时间同步指令，若设备有时间功能，可⽤此指令包含的时间来同设备上的时间。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7" >DATA</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <th>0x02</th>
+                            <th>0x41</th>
+                            <th>0x04</th>
+                            <th>时间（7）</th>
+                            <th>xx</th>
+                            <th>0x03</th>
+                        </tr>
+                    </table>
+                    <p>data字段中数据如下</p>
+                    <table>
+                        <tr>
+                            <th class="td9">YEAR</th>
+                            <th class="td9">MONTH</th>
+                            <th class="td9">DAY</th>
+                            <th class="td9">WEEK</th>
+                            <th class="td9">HOUR</th>
+                            <th class="td9">MIN.</th>
+                            <th class="td9">SEC.</th>
+                          
+                        </tr>
+                        <tr>
+                           <th>21</th>
+                           <th>5</th>
+                           <th>6</th>
+                           <th>4</th>
+                           <th>13</th>
+                           <th>45</th>
+                           <th>0</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x41</td>
+                            <td>0x04</td>
+                            <td>0x45</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <ul>
+                    <li>*YEAR：为00~99的年份值。</li>
+                    <li>*WEEK：0 星期⽇，1~6 星期⼀~星期六。</li>
+                </ul>
+
+
+
+
+
+
+                <p class="item-title">设备状态 0x42 、设备数据 0x43</p>
+                <P>APP连接蓝⽛后在待机及运动中，APP会实时获取设备当前状态数据来决定
+                    相应的数据显⽰。
+                </P>
+                <div class="item-subtitle">1. 获取设备状态</div>
+                <p>设备当前状态是APP运⾏的依据，也是APP与设备互通的基础，因此在
+                    APP连接蓝⽛后就会以每秒3次的周期不间断获取设备状态。
+                </p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" >CMD</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x42</td>
+                            <td>0x42</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" >CMD</th>
+                            <th class="td8" colspan="2">DATA</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x42</td>
+                            <td>状态（B）</td>
+                            <td>数据（N）</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <p>状态及数据对应如下</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td9">名称</th>
+                            <th class="td9">状态</th>
+                            <th class="td9" colspan="7">数据</th>
+                        </tr>
+                        <tr>
+                            <td>待机</td>
+                            <td>0</td>
+                            <td colspan="7"></td>
+                        </tr>
+                        <tr>
+                            <td>启动中</td>
+                            <td>1</td>
+                            <td colspan="7">启动倒计时（B）秒</td>
+                        </tr>
+                        <tr>
+                            <td>运行</td>
+                            <td>2</td>
+                            <td >速度（W）</td>
+                            <td >阻力（B）</td>
+                            <td >频率（W）</td>
+                            <td >心率（B）</td>
+                            <td >瓦特（W）</td>
+                            <td >坡度（B）</td>
+                            <td >段索引（B）</td>
+                        </tr>
+                        <tr>
+                            <td>睡眠</td>
+                            <td>20</td>
+                            <td colspan="7"></td>
+                        </tr>
+                        <tr>
+                            <td>故障</td>
+                            <td>21</td>
+                            <td colspan="7">故障码（B）</td>
+                        </tr>
+                    </table>
+                </div>
+                <ul>
+                    <li>速度是以 0.01 为单位的16位整数，如：1000，则为 10.00 km/h；</li>
+                    <li>频率对应踏频、步频等，名称与实际设备对应；</li>
+                    <li>⽡特单位为 0.1⽡，如 1000 代表 100.0 ⽡；</li>
+                    <li>段索引仅在程式模式时使⽤，从1开始到程式长度；</li>
+                    <li>设备不需要启动倒计时，状态直接从待机变化到运⾏。</li>
+
+                </ul>
+               
+
+
+                <div class="item-subtitle">2. 获取运动数据</div>
+                <p>设备运⾏后通过此指令来获取当前运动量数据。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x43</td>
+                            <td>0x01</td>
+                            <td>0x42</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8" colspan="4">DATA</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x43</td>
+                            <td>0x01</td>
+                            <td>时间（W）</td>
+                            <td>距离（W）</td>
+                            <td>热量（W）</td>
+                            <td>计数（W）</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <ul>
+                    <li>运动量不受倒计模式影响，数据总是从0开始向上计；</li>
+                    <li>时间是运动所⽤时长，以秒为单位；</li>
+                    <li>距离在⼩于32000时，单位为1，否则最⾼位置1同时单位为10；</li>
+                    <li>计数为本次运动开始后感应器感应次数。</li>
+                    <li>距离：如当前距离为30000⽶，则返回 30000 (0x7530)；若运动距离达到
+                        50000⽶时，返回 37768 (0x9388)，值 = 距离除以10后将最⾼位置1。也
+                        可以⼀开始将最⾼位置1来告诉APP距离都是以为10⽶为单位。
+                    </li>
+
+                </ul>
+
+
+
+                <div class="item-subtitle">3. 获取运动信息</div>
+                <p>APP连接蓝⽛后，若由设备端启动，则APP会发送当前指令来获得当前 运动信息，根据模式进⾏不同显⽰，同时也判断是否与当前⽤户冲突。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x43</td>
+                            <td>0x02</td>
+                            <td>0x41</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8" colspan="5">DATA</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x43</td>
+                            <td>0x02</td>
+                            <td>用户ID(L)</td>
+                            <td>运动ID(L)</td>
+                            <td>模式(B)</td>
+                            <td>段数(B)</td>
+                            <td>目标(W)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <ul>
+                    <li>⽤户ID、运动ID是设备控制指令写⼊的值，在此回传；</li>
+                    <li>模式参见设备控制部分的设备启动指令处；</li>
+                    <li>段数为程式模式下对应的程式的总段数，其它模式为0；</li>
+                    <li>⽬标是倒计模式或程式的⽬标总值，其它模式为0。</li>
+                    <li>⽬标为距离时，遵守⾼位置1标准，见上述。 </li>
+
+                </ul>
+
+
+
+
+                <div class="item-subtitle">4. 获取程式数据</div>
+                <p>由设备开始程式模式运动时，APP会发送此指令来获取程式数据。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7" colspan="2">DATA</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x43</td>
+                            <td>0x03</td>
+                            <td>索引(B)</td>
+                            <td>长度(B)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8" colspan="2">DATA</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x43</td>
+                            <td>0x03</td>
+                            <td>索引(B)</td>
+                            <td>长度(B)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <p>NOTE：索引是程式数据起始位置，从0到程度长度-1，APP依程式段
+                    数来⾃动分段多次发次此指令以获取所有程式数据，返回的数据每字
+                    节为1段数据，代表当前阻⼒值。
+                </p>
+
+
+
+
+
+
+
+                <p class="item-title">设备控制 0x44</p>
+                <P>APP连接蓝⽛后可以对设备进⾏开始与停⽌操作。</P>
+                <div class="item-subtitle">1. 设备就绪</div>
+                <p>APP在即将开始运⾏设备时，最先发送此指令给设备，通知设备即将
+                    开始，设备在接收到此指令后，进⾏运动数据重置，同时恢复相关设置值。
+                </p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x01</td>
+                            <td>倒计值(B)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">DATA</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x01</td>
+                            <td>倒计值(B)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <p>倒计值：若设备需要倒计时提⽰⽤户，返回数据为倒计秒值。若不需 请返回0。</p>
+
+
+
+
+                <div class="item-subtitle">2. 运动控制</div>
+                <p>发送就绪指令后，APP会根据⽤户选择的模式写⼊相关数据（见下页其它指令部分），之后发送开始指令，设备开始运⾏，运动后可发送暂停或停⽌等指令进⾏相关控制。</p>
+
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>开始或继续</td>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x02</td>
+                            <td>0x46</td>
+                            <td>0x03</td>
+                        </tr>
+                        <tr>
+                            <td>暂停</td>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x03</td>
+                            <td>0x47</td>
+                            <td>0x03</td>
+                        </tr>
+                        <tr>
+                            <td>停止</td>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x04</td>
+                            <td>0x40</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>同上指令</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div class="item-subtitle">3. 设置参数</div>
+                <p>运动过程中APP会根据需要发送此指令来控制设备，若设备不⽀持坡度则忽略坡度值，要求：设备接收此指令时不发提⽰⾳。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7" colspan="2">DATA</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x05</td>
+                            <td>阻力(B)</td>
+                            <td>坡度(B)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x05</td>
+                            <td>0x41</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+                <div class="item-subtitle">4. 设置步进参数</div>
+                <p>通过此指令允许APP加或减设备对应参数。发送参数时，阻⼒或坡度为⼀个有符号的字节，若为+1则参数加1，-1则参数减1，0则不调整，（应⽀持 -100 ~ +100）。返回设备阻⼒与坡度的实际值。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7" colspan="2">DATA</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x06</td>
+                            <td>阻力(B)</td>
+                            <td>坡度(B)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x05</td>
+                            <td>0x41</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+
+
+                <div class="item-subtitle">5. 设置⽤户信息</div>
+                <p>APP在发送就绪指令后，发送⽤户信息给设备，设备使⽤此信息来计算相关运动量，同时应保留⽤户ID以备APP获取运动信息时⽤。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7" colspan="5">DATA</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x0A</td>
+                            <td>ID(L)</td>
+                            <td>体重(B)</td>
+                            <td>身高(B)</td>
+                            <td>年龄(B)</td>
+                            <td>性别(B)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x0A</td>
+                            <td>0x4E</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <p>体重： kg　　⾝⾼：cm　　性别：0男1⼥</p>
+
+
+
+
+
+                <div class="item-subtitle">6. 设置运动模式</div>
+                <p>开始运动前，APP会发送此指令来明确设备要进⾏的运动模式。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7" colspan="4">DATA</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x0B</td>
+                            <td>运动ID(L)</td>
+                            <td>模式(B)</td>
+                            <td>段数(B)</td>
+                            <td>目标(W)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x0B</td>
+                            <td>0x4F</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td9">模式（低4位）</th>
+                            <th class="td9">倒计模式</th>
+                            <th class="td9">模式（高4位）</th>
+                            <th class="td9">控制模式</th>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>自由模式</td>
+                            <td>0x10</td>
+                            <td>阻力控制模式</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>倒计时间</td>
+                            <td>0x20</td>
+                            <td>心率控制模式</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>倒计距离</td>
+                            <td>0x30</td>
+                            <td>功率控制模式</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>倒计卡路里</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>倒计计数</td>
+                            <td colspan="2">有控制模式时，必须有倒计模式</td>
+                        </tr>
+                    </table>
+                </div>
+                <ul>
+                    <li>运动ID为APP识别⽤，保存以备读取运动信息时⽤；</li>
+                    <li>模式：低4位⽤于倒计量选择，⾼4位选择控制模式；</li>
+                    <li>段数：模式包括控制模式时程式数据总段数，其它模式为0；</li>
+                    <li>⽬标是倒计模式或程式的⽬标总值，其它模式为0；</li>
+                    <li>⽬标若为距离值，其遵守⾼位置1标准，见获取运动数据指令。</li>
+
+                </ul>
+
+
+
+
+
+
+
+
+
+                <div class="item-subtitle">7. 设置设备功能</div>
+                <p>开始运动前，APP根据情况发送此指令来关闭设备某些功能，如：⽐赛时APP会发送此指令来关闭调节阻⼒的功能（在设备接收到设备就绪指令时，设备应当恢复所有控制）。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7">DATA</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x0C</td>
+                            <td>功能开关(B)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">DATA</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x0B</td>
+                            <td>功能状态</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <p>功能开关（对应位为0时，关闭此功能）：bit0(1：允许阻力控制);bit1(1：允许坡度控制)。返回的功能状态为设备实际允许的功能状态</p>
+               
+
+
+
+
+                <div class="item-subtitle">8. 设置程式数据</div>
+                <p>APP选择程式模式运动时，APP在发送开始运动指令前将程式数据通过此指令传送到设备。</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td7">START</th>
+                            <th class="td7" colspan="2">CMD</th>
+                            <th class="td7" colspan="3">DATA</th>
+                            <th class="td7">FCS</th>
+                            <th class="td7">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x0D</td>
+                            <td>索引(B)</td>
+                            <td>长度(B)</td>
+                            <td>数据(N)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class=" table-content return-table">
+                    <table >
+                        <tr>
+                            <th class="td8">START</th>
+                            <th class="td8" colspan="2">CMD</th>
+                            <th class="td8">DATA</th>
+                            <th class="td8">FCS</th>
+                            <th class="td8">END</th>
+                        </tr>
+                        <tr>
+                            <td>0x02</td>
+                            <td>0x44</td>
+                            <td>0x0D</td>
+                            <td>索引(B)</td>
+                            <td>xx</td>
+                            <td>0x03</td>
+                        </tr>
+                    </table>
+                </div>
+                <ul>
+                    <li>APP会将分段将数据传送到设备；</li>
+                    <li>数据每字节代表1段；</li>
+                    <li>设备返回时，应包含对应的索引值。</li>
+
+                </ul>
+            </div>
+            <div class="protocol-content " id="count">
+                <div class="title">小件计次设备蓝牙协议</div>
+                <div class="version">v1.0</div>
+                <div class="version">（跳绳、健腹轮）</div>
+                <div class="item-title">设备信息</div>
+                <div class="item-subtitle2">1. 设置设备时间</div>
+                <p>APP通过此指令通过设备的unix时间（时间戳 精确到秒 一共11位）</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                            <th class="td10">CMD2~CMD5(4 byte)</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>Unix时间</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+                <div class="item-subtitle2">2. 获取设备电量</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>0</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="table-content return-table">
+                    <table>
+                        <tr>
+                            <th class="td11">CMD0</th>
+                            <th class="td11">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>电量百分比</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+
+
+                <div class="item-subtitle2">3. 获取设备信息</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>0</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="table-content return-table">
+                    <table>
+                        <tr>
+                            <th class="td11">CMD0</th>
+                            <th class="td11">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>N个字节的厂家名称</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="table-content return-table">
+                    <table>
+                        <tr>
+                            <th class="td11">CMD0</th>
+                            <th class="td11">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>N个字节的设备型号</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="table-content return-table">
+                    <table>
+                        <tr>
+                            <th class="td11">CMD0</th>
+                            <th class="td11">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>N个字节的设备序列号</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="table-content return-table">
+                    <table>
+                        <tr>
+                            <th class="td11">CMD0</th>
+                            <th class="td11">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>N个字节的软件版本号</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="table-content return-table">
+                    <table>
+                        <tr>
+                            <th class="td11">CMD0</th>
+                            <th class="td11">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>a</td>
+                            <td>N个字节的硬件版本号</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div class="item-title">设备控制</div>
+                <div class="item-subtitle2">1. 启动自由运动</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>1</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+                <div class="item-subtitle2">2. 启动计时运动</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                            <th>CMD2~CMD3</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>小字节序的秒数</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+
+                <div class="item-subtitle2">3. 启动计次运动</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                            <th>CMD2~CMD3</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>小字节序的个数</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+                <div class="item-subtitle2">4. 暂停运动</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>4</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                
+                <div class="item-subtitle2">5. 恢复运动</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>5</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+
+                <div class="item-subtitle2">6. 结束运动</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>6</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div class="item-subtitle2">7. 启动同步历史数据</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>7</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div class="item-subtitle2">8. 结束同步历史数据</div>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td10">CMD0</th>
+                            <th class="td10">CMD1</th>
+                            <th class="td10">CMD2~CMD3</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>8</td>
+                            <td>小字节序的同步成功的记录条数</td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div class="item-title">设备数据</div>
+                <div class="item-subtitle2">1. 上报实时数据（每秒一个Notify）2个字节的数据都是小字节序的</div>   
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td11">CMD0</th>
+                            <th class="td11">CMD1~CMD2</th>
+                            <th class="td11">CMD3~CMD4</th>
+                            <th class="td11">CMD5~CMD6</th>
+                            <th class="td11">CMD7~CMD8</th>
+                            <th class="td11">CMD9~CMD10</th>
+                            <th class="td11">CMD11~CMD12</th>
+                            <th class="td11">CMD13~CMD14</th>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>状态（0结束，1运行）</td>
+                            <td>运动时间（秒）</td>
+                            <td>总次数</td>
+                            <td>实时速度</td>
+                            <td>间断次数</td>
+                            <td>当前连续次数</td>
+                            <td>热量</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="item-subtitle2">2. 上报历史数据（多个历史数据组报上报Notify）</div>   
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td11">CMD0</th>
+                            <th class="td11">N byte</th>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>data</td>
+                        </tr>
+                    </table>
+                </div>
+                <p>data中数据代表如下</p>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <th class="td11">1 byte</th>
+                            <th class="td11">4 byte</th>
+                            <th class="td11">2 byte</th>
+                            <th class="td11">2 byte</th>
+                            <th class="td11">2 byte</th>
+                            <th class="td11">2 byte</th>
+                            <th class="td11">2 byte</th>
+                            <th class="td11">...</th>
+                            <th class="td11">2 byte</th>
+                            <th class="td11">2 byte</th>
+                            <th class="td11">...</th>
+                            <th class="td11">2 byte</th>
+
+                        </tr>
+                        <tr>
+                            <td>是否还有历史数据&本次个数</td>
+                            <td>运动记录时间戳</td>
+                            <td>运动时间（秒）</td>
+                            <td>总次数</td>
+                            <td>最大连续次数</td>
+                            <td>间断次数</td>
+                            <td>热量</td>
+                            <td>...</td>
+                            <td>运动记录时间戳</td>
+                            <td>运动时间（秒）</td>
+                            <td>...</td>
+                            <td>热量</td>
+
+                        </tr>
+                    </table>
+                </div>
+                <p>注：第一位中：bit0-3:历史数据条数，bit4:Rev,默认填0，bit5: 1-还有数据；0-没有后续数据，bit6-7:Ver,当前填0</p>
+
+            </div>
+           <div style="width: 100%;height: 100px;"></div>
+        </div>
+      </div>
+    </body>
+    <script>
+        function goto(id){
+            let top = document.getElementById(id).offsetTop
+            window.scrollTo(0,top);
+        }
+    </script>
+</html>
